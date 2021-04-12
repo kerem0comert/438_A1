@@ -1,7 +1,12 @@
 import re
 
-def encrypt(): pass
-def decrypt(): pass
+def encrypt(plaintext, key): 
+    
+    #remove whitespace chars
+    plaintext = re.sub(r"\s+", "", plaintext)
+    print(plaintext)
+    
+def decrypt(cipher, key): pass
 
 def getTable():
     table = []
@@ -11,8 +16,13 @@ def getTable():
             that is between singlequotes"""
             if any(x.isupper() for x in row): 
                 table.append(re.findall(r"'(.*?)'", row))
-    print(table)
+    return table
 
+
+def getInputs():
+    inputText = input("Inputtext: ")
+    key = input("Key: ")
+    return inputText, key
 
 
 def menu():
@@ -21,8 +31,12 @@ def menu():
     print("[2] Decrypt")
     print("[3] Exit")
     selection = int(input("Select: "))
-    if selection == 1: encrypt()
-    elif selection == 2: decrypt()
+    if selection == 1: 
+        plaintext, key = getInputs()
+        encrypt(plaintext, key)
+    elif selection == 2: 
+        cipher, key = getInputs()
+        decrypt(cipher, key)
     elif selection == 3: exit()
     else:
         print("Undefined selection!")
@@ -30,4 +44,4 @@ def menu():
         
 if __name__ == "__main__":
     table = getTable()
-    #menu()
+    menu()
