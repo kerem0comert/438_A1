@@ -1,5 +1,5 @@
 import re
-from string import ascii_lowercase
+from string import ascii_lowercase, ascii_uppercase
 from itertools import cycle
 
 table = []
@@ -13,7 +13,11 @@ def createTable():
                 table.append(re.findall(r"'(.*?)'", row))
     return table
 
-def pos(letter): return ascii_lowercase.index(letter)
+def posFromLetter(letter: str): 
+    if(letter.islower()): return ascii_lowercase.index(letter)
+    if(letter.isupper()): return ascii_uppercase.index(letter)
+    else: raise ValueError("The cipher only works with alphabetic characters.")
+
 
 """itertools' built-in cycle module can create a generator from a given string
 to yield what is needed, until the length constraint is satisfied."""
@@ -56,7 +60,7 @@ def encrypt():
 
     firstCipher = ""
     for index, _ in enumerate(plaintext):
-        firstCipher += table[pos(key[index])][pos(plaintext[index])]
+        firstCipher += table[posFromLetter(key[index])][posFromLetter(plaintext[index])]
         
     print(f"Plaintext: {plaintext}\nKey: {key}\nOutput (phase-1): {firstCipher}\n")
     print("Encryption Phase-2")
@@ -74,7 +78,7 @@ def encrypt():
     
 def decrypt(): 
     print("**********Decryption**********")
-    print("Decryption Phase-2")
+    print("\nDecryption Phase-2")
     
     cipher, key = getInputs()
     
@@ -85,7 +89,7 @@ def decrypt():
     #remove the padding char, if it exists
     if firstPlainText.endswith('0'): firstPlainText = firstPlainText[:-1]
 
-    print("Decryption Phase-1")
+    print("\nDecryption Phase-1")
     
     #make sure that the length of key can accomadate the plaintext
     if len(firstPlainText) > len(key): 
@@ -95,7 +99,7 @@ def decrypt():
    
     secondPlainText = ""
     for index, _ in enumerate(firstPlainText):
-        secondPlainText += table[pos(key[index])][pos(firstPlainText[index])]
+        secondPlainText += ascii_uppercase[table[posFromLetter(key[index])].index(firstPlainText[index])]
     print(f"Plaintext: {secondPlainText}")
     
     
@@ -107,10 +111,7 @@ def getInputs():
 
 
 def menu():
-    print("Simple Cypher:")
-    print("[1] Encrypt")
-    print("[2] Decrypt")
-    print("[3] Exit")
+    print("Simple Cypher:\n[1] Encrypt\n[2] Decrypt\n[3] Exit")
     selection = int(input("Select: "))
     if selection == 1: encrypt()
     elif selection == 2: decrypt()
@@ -120,6 +121,5 @@ def menu():
         menu()
         
 if __name__ == "__main__":
-    print(ascii_lowercase)
     createTable()
     menu()
