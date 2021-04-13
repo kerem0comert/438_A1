@@ -8,9 +8,9 @@ def createTable():
     with open("table.txt") as f:
         for row in [x.strip() for x in f.readlines()]: 
             """if a line contains any upper case letters at all, take anything 
-            that is between singlequotes"""
-            if any(x.isupper() for x in row): 
-                table.append(re.findall(r"'(.*?)'", row))
+            that is between singlequotes. Also filter out any empty lines."""
+            letters = re.findall(r"'(.?)'", row)
+            if letters: table.append(letters)
     return table
 
 def posFromLetter(letter: str): 
@@ -119,7 +119,7 @@ def menu():
     else:
         print("Undefined selection!")
         menu()
-        
+          
 if __name__ == "__main__":
     createTable()
     menu()
