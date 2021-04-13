@@ -1,4 +1,4 @@
-# Kerem Cömert 2315190**
+# Kerem Cömert 2315190
 
 ## Setup
 
