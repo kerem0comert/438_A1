@@ -30,7 +30,7 @@ def repeatKey(key, length):
 def cutInHalf(text): return text[:len(text)//2], text[len(text)//2:]
 
 def appendEverySecondChar(text, firstHalf, secondHalf): 
-    for index, letter in enumerate(firstHalf):
+    for index, _ in enumerate(firstHalf):
         text += firstHalf[index]
         text += secondHalf[index]
     return text
@@ -64,6 +64,8 @@ def encrypt():
         
     print(f"Plaintext: {plaintext}\nKey: {key}\nOutput (phase-1): {firstCipher}\n")
     print("Encryption Phase-2")
+    
+    #add the padding char
     if len(firstCipher) % 2: 
         firstCipher += '0'
     
@@ -97,13 +99,19 @@ def decrypt():
         
     print(f"InputText: {firstPlainText}\nKey: {key}")
    
+    """The algorithm below performs the following operations (from inner to outer) to decypher:
+    For each letter in the text:
+    - Get the alphabetical position of the letter in key. This integer will index the row of the table.
+    - Get the position of the letter in cipher, within this row. This integer will index the alphabet.
+    - Get thet letter whose alphabetical index is the integer obtained from the last step.
+    - Append the found letter to the plainText string.
+    """
     secondPlainText = ""
     for index, _ in enumerate(firstPlainText):
         secondPlainText += ascii_uppercase[table[posFromLetter(key[index])].index(firstPlainText[index])]
     print(f"Plaintext: {secondPlainText}")
     
     
-
 def getInputs():
     inputText = input("Inputtext: ")
     key = input("Key: ")
