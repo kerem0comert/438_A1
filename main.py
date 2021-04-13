@@ -30,6 +30,16 @@ def appendEverySecondChar(text, firstHalf, secondHalf):
         text += firstHalf[index]
         text += secondHalf[index]
     return text
+
+def getEvenAndOddChars(text):
+    evenString = ""
+    oddString  = ""
+    for evenChar in range(0,len(text), 2):
+        evenString += text[evenChar]
+    for oddChar in range(1, len(text), 2):
+        oddString += text[oddChar]
+    return evenString, oddString
+    
     
 def encrypt(): 
     print("**********Encryption**********")
@@ -58,19 +68,36 @@ def encrypt():
     
     secondCipher = appendEverySecondChar("", firstHalf, secondHalf)
     print(f"Ciphertext: {secondCipher}")
-    return secondCipher
+
     
 
     
 def decrypt(): 
     print("**********Decryption**********")
-    print("Decryption Phase-1")
+    print("Decryption Phase-2")
     
     cipher, key = getInputs()
     
-    firstHalf, secondHalf = cutInHalf(cipher)
-    firstPlainText = appendEverySecondChar("", firstHalf, secondHalf)
-    print(firstPlainText)
+    evenString, oddString = getEvenAndOddChars(cipher)
+    firstPlainText = evenString + oddString
+    print(f"group-1: {evenString}\ngroup-2: {oddString}\nOutput (phase-2): {firstPlainText}")
+    
+    #remove the padding char, if it exists
+    if firstPlainText.endswith('0'): firstPlainText = firstPlainText[:-1]
+
+    print("Decryption Phase-1")
+    
+    #make sure that the length of key can accomadate the plaintext
+    if len(firstPlainText) > len(key): 
+        key = repeatKey(key, len(firstPlainText))
+        
+    print(f"InputText: {firstPlainText}\nKey: {key}")
+   
+    secondPlainText = ""
+    for index, _ in enumerate(firstPlainText):
+        secondPlainText += table[pos(key[index])][pos(firstPlainText[index])]
+    print(f"Plaintext: {secondPlainText}")
+    
     
 
 def getInputs():
